@@ -23,7 +23,8 @@ public class Main {
     public static void main(String[] args) {
         // add a few student's and courses by default
         Course course1 = new Course("Physics 1", 5, 1021, 11, "Started", "Mike Johnson");
-        Course course2 = new Course("Chemistry 1", 5, 1021, 11, "Started", "Steve Gregory");
+        Course course2 = new Course("Chemistry 1", 5, 1022, 9, "Started", "Steve Gregory");
+        Course course3 = new Course("Thermodynamics", 5, 1021, 10, "Started", "George Kingston");
         // create some students and add them to the student collection
         Student student1 = new Student("Mike Johnson", new GregorianCalendar(1988, 8, 15));
         Student student2 = new Student("Ken Johnson", new GregorianCalendar(1942, 3, 12));
@@ -33,8 +34,10 @@ public class Main {
         // add the courses to each student
         collectionOfStudents.addCourseById(student1.getStudentId(), course1);
         collectionOfStudents.addCourseById(student1.getStudentId(), course2);
+        collectionOfStudents.addCourseById(student1.getStudentId(), course3);
         collectionOfStudents.addCourseById(student2.getStudentId(), course1);
         collectionOfStudents.addCourseById(student2.getStudentId(), course2);
+        collectionOfStudents.addCourseById(student2.getStudentId(), course3);
 
         int choice;
 
