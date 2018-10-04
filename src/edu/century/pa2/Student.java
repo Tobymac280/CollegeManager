@@ -102,4 +102,21 @@ public class Student implements Cloneable {
         String name = firstName + " " + lastName;
         return new Student(name, birthdate);
     }
+
+    public boolean removeCourse(Course course) {
+        // Create a course node that will be checked against the other course nodes in the course collection
+        CourseNode node = new CourseNode(course);
+
+        if(courses == null || courses.getHead() == null){ // the collection is empty
+            return false;
+        }
+
+        // attempt to remove the course
+        boolean deleted = courses.remove(course);
+        if(deleted) {
+            return true; // it was deleted
+        }
+
+        return false;
+    }
 }

@@ -203,4 +203,21 @@ public class StudentCollection implements Cloneable {
 
         return null;
     }
+
+    /** Remove a course, by passing in the student and the course details */
+    public boolean removeCourse(String studentId, Course course) {
+        // search for the student that matches this id
+        Student studentFound = search(1, studentId); // search by id
+        if(studentFound == null){ // no student was found
+            return false;
+        }
+        // find where the student is in the collection
+        int indexOfStudent = findIndexOfStudent(studentFound.getStudentId());
+        // remove the course
+        boolean removed = students[indexOfStudent].removeCourse(course);
+        if(removed) { // it was removed
+            return true;
+        }
+        return false;
+    }
 } // end of StudentCollection class

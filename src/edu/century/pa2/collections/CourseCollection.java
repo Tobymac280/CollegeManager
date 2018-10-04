@@ -34,9 +34,10 @@ public class CourseCollection {
     }
 
     /** Remove a course from the list */
-    public void remove(Course target) {
+    public boolean remove(Course target) {
+        boolean deleted = false;
         if(numberOfCourses == 0){ // there's nothing in the entire list
-            return; // go back to the caller -- can't do anything
+            return false; // go back to the caller -- can't do anything
         }
 
         CourseNode node = new CourseNode(target);
@@ -50,6 +51,7 @@ public class CourseCollection {
                     head = head.getNextCourse(); // erase the first element, and move the last element to the head
                 }
                 numberOfCourses--; // take 1 away from the number of courses
+                deleted = true;
             }else if(target.equals(cursor) && cursor == tail){ // we are trying to remove the tail of the list
                 if(numberOfCourses == 1){
                     head = tail = null; // empty head and tail
@@ -58,11 +60,14 @@ public class CourseCollection {
                     tail = precursor;
                 }
                 numberOfCourses--;
+                deleted = true;
             }else if(target.equals(target)) { // found the item, but it's not at the beginning or end of the list
                 precursor.setNextCourse(cursor.getNextCourse());
                 numberOfCourses--;
+                deleted = true;
             }
         }
+        return deleted;
     } // end of remove()
 
     /** Returns a list of the items */
