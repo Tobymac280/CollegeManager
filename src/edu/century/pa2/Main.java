@@ -37,10 +37,10 @@ public class Main {
 
             // evaluate the user's choice
             switch(choice) {
-                case 1: // add/remove a student
+                case 1: // ADD/REMOVE A STUDENT
                     addOrRemoveStudent();
                     break;
-                case 2: // Allow the user to select a student
+                case 2: // ALLOW A USER TO SELECT A STUDENT
                     System.out.println("Please enter the following information in order to select a student: ");
                     currentStudentSelected = searchForAStudent();
                     int subChoice;
@@ -51,25 +51,16 @@ public class Main {
                         subChoice = intInput.nextInt();
 
                         switch(subChoice){
-                            case 1: // add/remove a course
+                            case 1: // ADD/REMOVE A COURSE
                                 addOrRemoveCourse();
                                 break;
-                            case 2: // print out the user information and the course information
+                            case 2: // PRINT OUT THE USER INFORMATION AND THE COURSE INFORMATION
                                 printUserAndCourseInfo();
                                 break;
-                            case 3: // search for a course by id
-                                System.out.print("Please enter an id to search by: ");
-                                int idToSearch = intInput.nextInt();
-                                Course course = currentStudentSelected.searchForCourseById(idToSearch);
-                                if(course == null){ // no course found
-                                    System.out.println("No course was found.");
-                                }else{
-                                    System.out.println("Course found!");
-                                    // print out the course's information
-                                    System.out.println("Information: " + course.toString());
-                                }
+                            case 3: // SEARCH FOR A COURSE BY ID
+                                searchForACourseById();
                                 break;
-                            case 4: // exit
+                            case 4: // EXIT BACK TO MAIN MENU
                                 System.out.println("Exiting.");
                                 break;
                             default:
@@ -79,9 +70,9 @@ public class Main {
                         System.out.println("\n\n\n\n\n\n");
                     }while(subChoice != 4);
                     break;
-                case 3: // list all registered students with their courses
+                case 3: // LIST ALL REGISTERED STUDENTS WITH THEIR COURSES
                     listAllStudentsAndCourses();
-                case 4: // search for a student
+                case 4: // SEARCH FOR A STUDENT
                     Student studentFound = searchForAStudent();
                     // analyze what was received from the analysis above
                     if(studentFound != null){ // there was something returned
@@ -91,7 +82,7 @@ public class Main {
                         System.out.println("No student was found that matched these credentials.");
                     }
                     break;
-                case 5: // exit the program
+                case 5: // EXIT THE PROGRAM
                     System.out.println("Program exiting...");
                     System.exit(0); // quit the program
                     break; // break is here just in case
@@ -254,7 +245,7 @@ public class Main {
             // prompt the user to select a student
             System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
                     + "whom you will remove the course from: ");
-            Student studentFound = searchForAStudent();
+            Student studentFound = currentStudentSelected;
 
             if(studentFound == null){
                 System.out.println("No student was found!");
@@ -342,6 +333,19 @@ public class Main {
             System.out.println("No courses to show.");
         for(CourseNode cursor = currentStudentSelected.getCourses().getHead(); cursor != null; cursor = cursor.getNextCourse()){
             System.out.println("\t\t\t" + cursor.toString());
+        }
+    }
+    /** Search for a course by id */
+    private static void searchForACourseById(){
+        System.out.print("Please enter an id to search by: ");
+        int idToSearch = intInput.nextInt();
+        Course course = currentStudentSelected.searchForCourseById(idToSearch);
+        if(course == null){ // no course found
+            System.out.println("No course was found.");
+        }else{
+            System.out.println("Course found!");
+            // print out the course's information
+            System.out.println("Information: " + course.toString());
         }
     }
 }
