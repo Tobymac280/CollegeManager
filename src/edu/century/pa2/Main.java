@@ -231,16 +231,18 @@ public class Main {
             System.out.println("No students.");
             return; // return to the caller
         }
+
+        System.out.println("Student and course information: ");
         for(int i = 0, length = collectionOfStudents.getSize(); i < length; i++){ // go through each student
             // access the student
             System.out.println(collectionOfStudents.get(i).getFirstName() + " " + collectionOfStudents.get(i).getLastName() + ":");
             // store the courses of the current student
             CourseCollection courses = collectionOfStudents.get(i).getCourses();
             if(courses.getHead() == null){ // is the collection empty?
-                System.out.println("\t\tNo courses to display.");
+                System.out.println("\tNo courses to display.");
             }
             for(CourseNode currentCourse = courses.getHead(); currentCourse != null; currentCourse = currentCourse.getNextCourse()){ // go through the courses
-                System.out.println("\t\t" + currentCourse.toString()); // print the toString
+                System.out.println("\t" + currentCourse.toString()); // print the toString
             }
         }
     }
