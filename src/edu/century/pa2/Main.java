@@ -63,7 +63,7 @@ public class Main {
                     }
                     break;
                 case 3:
-                    System.out.println("Needs to be implemented.");
+                    searchForAStudent();
                     break;
                 case 4:
                     System.out.println("Needs to be implemented.");
@@ -90,6 +90,47 @@ public class Main {
             }
             System.out.println("\n\n\n\n\n\n");
         }while(choice != 9);
+    }
+
+    private static void searchForAStudent() {
+        System.out.println("Would you like to search by: \n1. ID\n2. First Name\n3. Last Name");
+        // get the user's choice
+        int userChoice;
+        try{
+            userChoice = intInput.nextInt();
+        }catch (IllegalArgumentException e){
+            userChoice = 0; // invalid choice, according to the switch statement
+        }
+
+        // object that will hold the Student that was found
+        Student studentFound;
+
+        // Analyze the user's choice
+        switch(userChoice){
+            case 1:
+                // get the user input
+                System.out.print("Please enter the id: ");
+                String id = stringInput.nextLine();
+                studentFound = collectionOfStudents.search(1, id);
+                break;
+            case 2:
+                // get the user input
+                System.out.print("Please enter the first name: ");
+                String firstName = stringInput.nextLine();
+                studentFound = collectionOfStudents.search(2, firstName);
+                break;
+            case 3:
+                // get the user input
+                System.out.print("Please enter the last name: ");
+                String lastName = stringInput.nextLine();
+                studentFound = collectionOfStudents.search(3, lastName);
+                break;
+            default:
+                System.out.println("Not an option.");
+                    return; // return to the caller
+        }
+
+        // TODO: Print information for the student that was found
     }
 
     private static void printMenu() {

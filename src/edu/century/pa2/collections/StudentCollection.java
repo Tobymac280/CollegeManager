@@ -169,4 +169,38 @@ public class StudentCollection implements Cloneable {
         }
     }
 
+    /** Search for a student by their 1. ID, 2. First Name, 3. Last Name.
+     * Pass in the type, respectively to the order above, and the value of the item to search for */
+    public Student search(int type, String value) {
+        if(numberOfStudents == 0)
+            return null; // return nothing, there are no students to search through
+
+        switch(type){
+            case 1: // id
+                for(Student student: students){
+                    if(student.getStudentId().equals(value)) { // are they equal?
+                        return student;
+                    }
+                }
+                break;
+            case 2: // first name
+                for(Student student: students){
+                    if(student.getFirstName().equals(value)) { // are they equal?
+                        return student;
+                    }
+                }
+                break;
+            case 3: // last name
+                for(Student student: students){
+                    if(student.getLastName().equals(value)) { // are they equal?
+                        return student;
+                    }
+                }
+                break;
+            default:
+                return null; // return nothing
+        }
+
+        return null;
+    }
 } // end of StudentCollection class
