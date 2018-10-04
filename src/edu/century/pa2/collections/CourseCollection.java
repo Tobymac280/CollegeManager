@@ -40,8 +40,6 @@ public class CourseCollection {
             return false; // go back to the caller -- can't do anything
         }
 
-        CourseNode node = new CourseNode(target);
-
         for(CourseNode cursor = head, precursor = null; cursor!=null; precursor = cursor, cursor = cursor.getNextCourse()){
             // check for if the first element is the head
             if(target.equals(cursor) && cursor == head){
