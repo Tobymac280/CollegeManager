@@ -103,10 +103,8 @@ public class Student implements Cloneable {
         return new Student(name, birthdate);
     }
 
+    /** Remove a course from this student */
     public boolean removeCourse(Course course) {
-        // Create a course node that will be checked against the other course nodes in the course collection
-        CourseNode node = new CourseNode(course);
-
         if(courses == null || courses.getHead() == null){ // the collection is empty
             return false;
         }
@@ -117,7 +115,7 @@ public class Student implements Cloneable {
             return true; // it was deleted
         }
 
-        return false;
+        return false; // return that it didn't work -- false
     }
 
     /** Pass in an id, this method will search for and return a course object; null if not found. */
