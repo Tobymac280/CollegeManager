@@ -21,6 +21,21 @@ public class Main {
     private static Scanner stringInput = new Scanner(System.in);
 
     public static void main(String[] args) {
+        // add a few student's and courses by default
+        Course course1 = new Course("Physics 1", 5, 1021, 11, "Started", "Mike Johnson");
+        Course course2 = new Course("Chemistry 1", 5, 1021, 11, "Started", "Steve Gregory");
+        // create some students and add them to the student collection
+        Student student1 = new Student("Mike Johnson", new GregorianCalendar(1988, 8, 15));
+        Student student2 = new Student("Ken Johnson", new GregorianCalendar(1942, 3, 12));
+        // add the students
+        collectionOfStudents.add(student1);
+        collectionOfStudents.add(student2);
+        // add the courses to each student
+        collectionOfStudents.addCourseById(student1.getStudentId(), course1);
+        collectionOfStudents.addCourseById(student1.getStudentId(), course2);
+        collectionOfStudents.addCourseById(student2.getStudentId(), course1);
+        collectionOfStudents.addCourseById(student2.getStudentId(), course2);
+
         int choice;
 
         // Welcome message
@@ -216,12 +231,10 @@ public class Main {
         for(int i = 0, length = collectionOfStudents.getSize(); i < length; i++){ // go through each student
             // access the student
             System.out.println(collectionOfStudents.get(i).getFirstName() + " " + collectionOfStudents.get(i).getLastName() + ":");
-
             // store the courses of the current student
             CourseCollection courses = collectionOfStudents.get(i).getCourses();
             if(courses.getHead() == null){ // is the collection empty?
                 System.out.println("\t\tNo courses to display.");
-                return; // return to the caller
             }
             for(CourseNode currentCourse = courses.getHead(); currentCourse != null; currentCourse = currentCourse.getNextCourse()){ // go through the courses
                 System.out.println("\t\t" + currentCourse.toString()); // print the toString
