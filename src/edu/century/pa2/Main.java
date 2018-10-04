@@ -38,29 +38,7 @@ public class Main {
             // evaluate the user's choice
             switch(choice) {
                 case 1: // add/remove a student
-                    System.out.println("Would you like to add or remove a student?");
-                    System.out.print("Add/remove: ");
-                    String answer = stringInput.nextLine();
-                    if(answer.toLowerCase().equals("add")){
-                        // Add the student
-                        Student newStudent = retrieveStudentInformation();
-                        collectionOfStudents.add(newStudent); // add a new student
-                        System.out.println("Account successfully created!");
-                        System.out.println("Their student id is: " + newStudent.getStudentId());
-                    }else if(answer.toLowerCase().equals("remove")) {
-                        // remove the student
-                        Student studentToRemove = retrieveStudentInformation();
-                        // remove the student
-                        boolean removed = collectionOfStudents.remove(studentToRemove);
-
-                        if(removed)
-                            System.out.println("Account removed.");
-                        else
-                            System.out.println("Account not removed.");
-                    }else {
-                        System.out.println("This wasn't an option.");
-                        // do nothing else, causing them to return to the main menu
-                    }
+                    addOrRemoveStudent();
                     break;
                 case 2: // Allow the user to select a student
                     System.out.println("Please enter the following information in order to select a student: ");
@@ -74,53 +52,25 @@ public class Main {
 
                         switch(subChoice){
                             case 1: // add/remove a course
-                                System.out.println("Would you like to add or remove a course to/from a student?");
-                                System.out.print("Add/remove: ");
-                                String courseAnswer = stringInput.nextLine();
-                                if(courseAnswer.toLowerCase().equals("add")){
-                                    addACourse();
-                                }else if(courseAnswer.toLowerCase().equals("remove")){
-                                    removeACourse();
-                                }else {
-                                    System.out.println("This wasn't an option.");
-                                    // do nothing else, causing them to return to the main menu
-                                }
+                                addOrRemoveCourse();
                                 break;
-                            case 2:
-                                System.out.println("");
+                            case 2: // print out the user information and the course information
+                                printUserAndCourseInfo();
                                 break;
-                            case 3:
+                            case 3: // search for a course by id
                                 break;
-                            case 4:
+                            case 4: // exit
+                                System.out.println("Exiting.");
                                 break;
                             default:
                                 System.out.println("Not an option.");
                                 break;
                         }
-//                    }
+                        System.out.println("\n\n\n\n\n\n");
                     }while(subChoice != 4);
                     break;
                 case 3: // list all registered students with their courses
-                    if(collectionOfStudents == null) {// is the collection empty?
-                        System.out.println("No students.");
-                        return; // return to the caller
-                    }
-
-                    Scanner scanner = new Scanner(System.in);
-                    for(int i = 0, length = collectionOfStudents.getSize(); i < length; i++){ // go through each student
-                        // access the student
-                        System.out.println(collectionOfStudents.get(i).getFirstName() + " " + collectionOfStudents.get(i).getLastName() + ":");
-
-                        // store the courses of the current student
-                        CourseCollection courses = collectionOfStudents.get(i).getCourses();
-                        if(courses.getHead() == null){ // is the collection empty?
-                            System.out.println("\t\tNo courses to display.");
-                            return; // return to the caller
-                        }
-                        for(CourseNode currentCourse = courses.getHead(); currentCourse != null; currentCourse = currentCourse.getNextCourse()){ // go through the courses
-                            System.out.println("\t\t" + currentCourse.toString()); // print the toString
-                        }
-                    }
+                    listAllStudentsAndCourses();
                 case 4: // search for a student
                     Student studentFound = searchForAStudent();
                     // analyze what was received from the analysis above
@@ -143,6 +93,7 @@ public class Main {
         }while(choice != 7);
     }
 
+    /** Prints the main menu */
     private static void printMenu() {
         System.out.println("Menu:");
         System.out.println("1. Add/Remove a student.");
@@ -161,36 +112,64 @@ public class Main {
         System.out.println("4. Exit.");
     }
 
-    /** Remove a course */
-    private static void removeACourse() {
-        // prompt the user to select a student
-        System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
-        + "whom you will remove the course from: ");
-        Student studentFound = searchForAStudent();
-        if(studentFound == null){
-            System.out.println("No student found.");
-            return; // return to the caller
-        }
+    // ------------- methods for all students -------------
+    /** Grab the information for a student object */
+    private static Student retrieveStudentInformation(){
+        // name
+        String firstName, lastName, name;
+        // birthday
+        int dayOfMonth, month, year;
+        GregorianCalendar birthdate = new GregorianCalendar();
 
-        System.out.println("Now, please enter the information for the course that you would like to remove: ");
-        Course course = retrieveCourseInformation();
+        // Get their name information
+        System.out.print("Please enter the student's first name: ");
+        firstName = stringInput.nextLine();
+        System.out.print("Please enter the student's last name: ");
+        lastName = stringInput.nextLine();
+        name = (firstName.toLowerCase() + " " + lastName.toLowerCase());
 
-        if(course == null){ // is the course empty?
-            // course search failed
-            System.out.println("Course search failed.\nReturning to menu.");
-            return; // return to the menu
-        }
+        // Get their birthday information
+        System.out.println("Please enter their birthday in a mm/dd/yyyy format (example: 01/23/2018 with forward slashes, for January 23rd 2018): ");
+        // retrieve the birthday from the user
+        String birthdayString = stringInput.nextLine();
+        String[] birthdayData = birthdayString.split("/");
+        // parse the data to integer types
+        month = Integer.parseInt(birthdayData[0]);
+        dayOfMonth = Integer.parseInt(birthdayData[1]);
+        year = Integer.parseInt(birthdayData[2]);
+        // set the fields for the birthdate object
+        birthdate.set(GregorianCalendar.YEAR, year);
+        birthdate.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth);
+        birthdate.set(GregorianCalendar.MONTH, month);
 
-        // remove a course by passing in the id and
-        boolean courseRemoved = collectionOfStudents.removeCourse(studentFound.getStudentId(), course);
+        return new Student(name, birthdate); // return the student that was received
+    }
+    /** Add or remove a student from the collection of students */
+    private static void addOrRemoveStudent(){
+        System.out.println("Would you like to add or remove a student?");
+        System.out.print("Add/remove: ");
+        String answer = stringInput.nextLine();
+        if(answer.toLowerCase().equals("add")){
+            // Add the student
+            Student newStudent = retrieveStudentInformation();
+            collectionOfStudents.add(newStudent); // add a new student
+            System.out.println("Account successfully created!");
+            System.out.println("Their student id is: " + newStudent.getStudentId());
+        }else if(answer.toLowerCase().equals("remove")) {
+            // remove the student
+            Student studentToRemove = retrieveStudentInformation();
+            // remove the student
+            boolean removed = collectionOfStudents.remove(studentToRemove);
 
-        if(courseRemoved){
-            System.out.println("Course removed, successfully.");
-        }else{
-            System.out.println("Course remove failed.");
+            if(removed)
+                System.out.println("Account removed.");
+            else
+                System.out.println("Account not removed.");
+        }else {
+            System.out.println("This wasn't an option.");
+            // do nothing else, causing them to return to the main menu
         }
     }
-
     /** Searches for a student and returns the student that is found */
     private static Student searchForAStudent() {
         System.out.println("Would you like to search by (integer): \n1. ID\n2. First Name\n3. Last Name");
@@ -232,66 +211,92 @@ public class Main {
 
         return studentFound;
     }
-
-    /** Add a course to a selected student */
-    private static void addACourse(){
-        // prompt the user to select a student
-        System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
-                + "whom you will remove the course from: ");
-        Student studentFound = searchForAStudent();
-
-        if(studentFound == null){
-            System.out.println("No student was found!");
-            return; // return to the caller -- menu
-        }
-
-        // create a new course
-        Course newCourse = retrieveCourseInformation();
-        if(newCourse == null){
-            System.out.println("Course creation failed.");
+    /** Print out all of the students and their respective courses */
+    private static void listAllStudentsAndCourses(){
+        if(collectionOfStudents == null) {// is the collection empty?
+            System.out.println("No students.");
             return; // return to the caller
         }
+        for(int i = 0, length = collectionOfStudents.getSize(); i < length; i++){ // go through each student
+            // access the student
+            System.out.println(collectionOfStudents.get(i).getFirstName() + " " + collectionOfStudents.get(i).getLastName() + ":");
 
-        // add the course to the list for the specified user
-        collectionOfStudents.addCourseById(studentFound.getStudentId(), newCourse);
-
-        System.out.println("Course added.");
+            // store the courses of the current student
+            CourseCollection courses = collectionOfStudents.get(i).getCourses();
+            if(courses.getHead() == null){ // is the collection empty?
+                System.out.println("\t\tNo courses to display.");
+                return; // return to the caller
+            }
+            for(CourseNode currentCourse = courses.getHead(); currentCourse != null; currentCourse = currentCourse.getNextCourse()){ // go through the courses
+                System.out.println("\t\t" + currentCourse.toString()); // print the toString
+            }
+        }
     }
 
-    /** Grab the information for a student object */
-    private static Student retrieveStudentInformation(){
-        // name
-        String firstName, lastName, name;
-        // birthday
-        int dayOfMonth, month, year;
-        GregorianCalendar birthdate = new GregorianCalendar();
+    // ------------- methods for selected student -------------
+    /** Block of code that will add or remove a course */
+    private static void addOrRemoveCourse(){
+        System.out.println("Would you like to add or remove a course to/from a student?");
+        System.out.print("Add/remove: ");
+        String courseAnswer = stringInput.nextLine();
+        if(courseAnswer.toLowerCase().equals("add")){
+            // Add a course
+            // prompt the user to select a student
+            System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
+                    + "whom you will remove the course from: ");
+            Student studentFound = searchForAStudent();
 
-        // Get their name information
-        System.out.print("Please enter the student's first name: ");
-        firstName = stringInput.nextLine();
-        System.out.print("Please enter the student's last name: ");
-        lastName = stringInput.nextLine();
-        name = (firstName.toLowerCase() + " " + lastName.toLowerCase());
+            if(studentFound == null){
+                System.out.println("No student was found!");
+                return; // return to the caller -- menu
+            }
 
-        // Get their birthday information
-        System.out.println("Please enter their birthday in a mm/dd/yyyy format (example: 01/23/2018 with forward slashes, for January 23rd 2018): ");
-        // retrieve the birthday from the user
-        String birthdayString = stringInput.nextLine();
-        String[] birthdayData = birthdayString.split("/");
-        // parse the data to integer types
-        month = Integer.parseInt(birthdayData[0]);
-        dayOfMonth = Integer.parseInt(birthdayData[1]);
-        year = Integer.parseInt(birthdayData[2]);
-        // set the fields for the birthdate object
-        birthdate.set(GregorianCalendar.YEAR, year);
-        birthdate.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth);
-        birthdate.set(GregorianCalendar.MONTH, month);
+            // create a new course
+            Course newCourse = retrieveCourseInformation();
+            if(newCourse == null){
+                System.out.println("Course creation failed.");
+                return; // return to the caller
+            }
 
-        return new Student(name, birthdate); // return the student that was received
+            // add the course to the list for the specified user
+            collectionOfStudents.addCourseById(studentFound.getStudentId(), newCourse);
+
+            System.out.println("Course added.");
+        }else if(courseAnswer.toLowerCase().equals("remove")){
+            // Remove a course
+            // prompt the user to select a student
+            System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
+                    + "whom you will remove the course from: ");
+            Student studentFound = searchForAStudent();
+            if(studentFound == null){
+                System.out.println("No student found.");
+                return; // return to the caller
+            }
+
+            System.out.println("Now, please enter the information for the course that you would like to remove: ");
+            Course course = retrieveCourseInformation();
+
+            if(course == null){ // is the course empty?
+                // course search failed
+                System.out.println("Course search failed.\nReturning to menu.");
+                return; // return to the menu
+            }
+
+            // remove a course by passing in the id and
+            boolean courseRemoved = collectionOfStudents.removeCourse(studentFound.getStudentId(), course);
+
+            if(courseRemoved){
+                System.out.println("Course removed, successfully.");
+            }else{
+                System.out.println("Course remove failed.");
+            }
+        }else {
+            System.out.println("This wasn't an option.");
+            // do nothing else, causing them to return to the main menu
+        }
     }
-
     /** Grab the information for a course object */
-    public static Course retrieveCourseInformation(){
+    private static Course retrieveCourseInformation(){
         String subject, status, instructor;
         int credits, courseNumber, courseSection;
 
@@ -317,5 +322,16 @@ public class Main {
 
         // return the course information
         return new Course(subject, credits, courseNumber, courseSection, status, instructor);
+    }
+    /** Simply print out the user and courses info */
+    private static void printUserAndCourseInfo(){
+        System.out.println("Student information: " + currentStudentSelected.toString());
+        if (currentStudentSelected.getCourses().getHead() != null)
+            System.out.println("Course information: ");
+        else
+            System.out.println("No courses to show.");
+        for(CourseNode cursor = currentStudentSelected.getCourses().getHead(); cursor != null; cursor = cursor.getNextCourse()){
+            System.out.println("\t\t\t" + cursor.toString());
+        }
     }
 }
