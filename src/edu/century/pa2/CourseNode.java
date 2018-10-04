@@ -20,4 +20,10 @@ public class CourseNode extends Course {
     public void removeNodeAfter() {
         nextCourse = nextCourse.nextCourse;
     }
+
+    @Override
+    public String toString() {
+        return "Id: " + course.getId() + ", Subject: " + course.getSubject() + ", Credits: " + course.getCredits() + ", Course Number: "
+                + course.getCourseNumber() + ", Course Section: " + course.getCourseSection() + ", Status: " + course.getStatus() + ", Instructor: " + course.getInstructor();
+    }
 }

@@ -241,13 +241,7 @@ public class Main {
         System.out.print("Add/remove: ");
         String courseAnswer = stringInput.nextLine();
         if(courseAnswer.toLowerCase().equals("add")){
-            // Add a course
-            // prompt the user to select a student
-            System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
-                    + "whom you will remove the course from: ");
-            Student studentFound = currentStudentSelected;
-
-            if(studentFound == null){
+            if(currentStudentSelected == null){
                 System.out.println("No student was found!");
                 return; // return to the caller -- menu
             }
@@ -260,16 +254,12 @@ public class Main {
             }
 
             // add the course to the list for the specified user
-            collectionOfStudents.addCourseById(studentFound.getStudentId(), newCourse);
+            collectionOfStudents.addCourseById(currentStudentSelected.getStudentId(), newCourse);
 
             System.out.println("Course added.");
+            System.out.println("Course id: " + newCourse.getId());
         }else if(courseAnswer.toLowerCase().equals("remove")){
-            // Remove a course
-            // prompt the user to select a student
-            System.out.println("Before adding the course, please first choose how you would like to select the student for\n"
-                    + "whom you will remove the course from: ");
-            Student studentFound = searchForAStudent();
-            if(studentFound == null){
+            if(currentStudentSelected == null){
                 System.out.println("No student found.");
                 return; // return to the caller
             }
@@ -284,7 +274,7 @@ public class Main {
             }
 
             // remove a course by passing in the id and
-            boolean courseRemoved = collectionOfStudents.removeCourse(studentFound.getStudentId(), course);
+            boolean courseRemoved = collectionOfStudents.removeCourse(currentStudentSelected.getStudentId(), course);
 
             if(courseRemoved){
                 System.out.println("Course removed, successfully.");
