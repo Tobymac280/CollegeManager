@@ -119,4 +119,20 @@ public class Student implements Cloneable {
 
         return false;
     }
+
+    /** Pass in an id, this method will search for and return a course object; null if not found. */
+    public Course searchForCourseById(int id){
+        if(courses.getHead() == null){ // nothing to search through
+            return null;
+        }
+
+        // iterate through each course node in the CourseCollection object
+        for(CourseNode course = courses.getHead(); course != null; course = course.getNextCourse()){
+            if(id == course.getId()){
+                return course.getCourse(); // found the course -- return it
+            }
+        }
+
+        return null; // didn't find a course
+    }
 }

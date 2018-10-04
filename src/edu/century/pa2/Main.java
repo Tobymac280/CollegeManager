@@ -58,6 +58,16 @@ public class Main {
                                 printUserAndCourseInfo();
                                 break;
                             case 3: // search for a course by id
+                                System.out.print("Please enter an id to search by: ");
+                                int idToSearch = intInput.nextInt();
+                                Course course = currentStudentSelected.searchForCourseById(idToSearch);
+                                if(course == null){ // no course found
+                                    System.out.println("No course was found.");
+                                }else{
+                                    System.out.println("Course found!");
+                                    // print out the course's information
+                                    System.out.println("Information: " + course.toString());
+                                }
                                 break;
                             case 4: // exit
                                 System.out.println("Exiting.");
