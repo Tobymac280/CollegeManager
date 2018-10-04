@@ -130,7 +130,12 @@ public class Main {
                     return; // return to the caller
         }
 
-        // TODO: Print information for the student that was found
+        // analyze what was received from the analysis above
+        if(studentFound != null){ // there was something returned
+            System.out.println("Student information: " + studentFound.toString());
+        }else{ // no student was found
+            System.out.println("No student was found that matched these credentials.");
+        }
     }
 
     private static void printMenu() {
